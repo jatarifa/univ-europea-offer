@@ -76,7 +76,7 @@ Sequential: `Usuario → Skills Assessment → Market Intelligence → Career Ad
 
 Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación → Respuesta`
 
-**Tecnología**: LangGraph, Temporal.io, Python
+**Tecnología**: LangGraph / Temporal.io
 
 ---
 
