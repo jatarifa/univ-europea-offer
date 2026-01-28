@@ -1,0 +1,81 @@
+@startuml
+!theme blueprint
+skinparam responseMessageBelowArrow true
+skinparam sequenceMessageAlign center
+
+actor Usuario as user
+participant "Orquestador\nTemporal.io" as orchestrator
+participant "Student Coach\nAgent" as coach
+participant "Skills Assessment\nAgent" as skills
+participant "Market Intelligence\nAgent" as market
+participant "Course Expert\nAgent" as course
+participant "Career Advisor\nAgent" as advisor
+database "Knowledge\nGraph" as kg
+database "Memoria\nCompartida" as memory
+participant "Google\nGemini" as gemini
+
+title Flujo de recomendación de trayectoria académica
+
+user -> orchestrator: "Quiero ser Data Scientist,\ntengo Grado en Economía"
+activate orchestrator
+
+orchestrator -> memory: Guardar contexto sesión
+orchestrator -> coach: Analizar consulta inicial
+activate coach
+coach -> coach: Evaluar información disponible
+coach --> orchestrator: Necesita más contexto
+deactivate coach
+
+orchestrator -> user: "¿Experiencia con datos?\n¿Restricciones tiempo/presupuesto?"
+user -> orchestrator: "1 año analista, uso SQL y Excel.\nPresupuesto medio, 2 años"
+
+orchestrator -> memory: Actualizar contexto
+
+orchestrator -> skills: Evaluar competencias actuales
+activate skills
+skills -> kg: Consultar skills requeridos\npara Data Scientist
+kg --> skills: Lista competencias
+skills -> skills: Mapear experiencia a skills
+skills --> orchestrator: SQL ✓ Excel ✓\nPython básico, ML ✗ (gap 60%)
+deactivate skills
+
+orchestrator -> memory: Guardar evaluación
+
+par Ejecución paralela
+    orchestrator -> market: Analizar mercado laboral\npara Data Scientist
+    activate market
+    market -> market: Consultar LinkedIn/InfoJobs API
+    market -> kg: Consultar tendencias históricas
+    kg --> market: Datos tendencias
+    market --> orchestrator: 8,500 ofertas/mes\n+40% YoY, 50-70K EUR
+    deactivate market
+else
+    orchestrator -> course: Buscar formaciones compatibles
+    activate course
+    course -> kg: Query: Cursos para gap ML\ncon restricciones tiempo/presupuesto
+    kg --> course: Máster Data Science
+    course --> orchestrator: Máster Data Science\n12 meses, Online
+    deactivate course
+end
+
+orchestrator -> memory: Guardar resultados market + course
+
+orchestrator -> advisor: Diseñar trayectorias con\ncontexto completo
+activate advisor
+advisor -> memory: Recuperar contexto completo
+memory --> advisor: Perfil + Skills + Market + Courses
+advisor -> gemini: Razonamiento complejo:\nDiseñar 3 trayectorias óptimas
+activate gemini
+gemini -> gemini: Analizar perfil y restricciones
+gemini -> gemini: Evaluar opciones formativas
+gemini -> gemini: Calcular ROI y alineamiento
+gemini --> advisor: 3 trayectorias con razonamiento
+deactivate gemini
+advisor --> orchestrator: Trayectoria recomendada:\nMáster Data Science\ncon justificación completa
+deactivate advisor
+
+orchestrator -> memory: Guardar recomendación
+orchestrator -> user: "Te recomiendo MÁSTER EN DATA SCIENCE\n\nPor qué: ...\nPerspectivas: ...\nROI: 300% en 4 años"
+deactivate orchestrator
+
+@enduml
