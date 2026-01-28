@@ -18,6 +18,8 @@ Sistema inteligente basado en **agentes IA especializados** que colaboran para o
 
 ### Capas principales
 
+El sistema se estructura en cinco capas que trabajan de forma coordinada. Desde la capa de presentación donde interactúan los usuarios, pasando por el orquestador que coordina la lógica de negocio, hasta las capas de datos que alimentan las decisiones de los agentes IA. Esta arquitectura modular permite escalar y evolucionar cada componente de manera independiente.
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Usuario (Web, Mobile, WhatsApp)                    │
@@ -42,6 +44,12 @@ Sistema inteligente basado en **agentes IA especializados** que colaboran para o
 │  Universidad | Mercado Laboral (LinkedIn/InfoJobs)  │
 └─────────────────────────────────────────────────────┘
 ```
+
+### Diagrama de arquitectura detallado
+
+El siguiente diagrama muestra la arquitectura completa del sistema, incluyendo las interacciones entre componentes, los flujos de datos y las tecnologías utilizadas en cada capa:
+
+![Diagrama de arquitectura](./recomendador-agentes-simple-c4.svg)
 
 ---
 
@@ -298,3 +306,9 @@ LinkedIn API → Nuevas ofertas → Job Market DB
 
    ¿Te ayudo con la beca?"
 ```
+
+### Diagrama de secuencia
+
+El siguiente diagrama muestra el flujo de ejecución del orquestador Temporal.io coordinando los diferentes agentes especializados:
+
+![Diagrama de secuencia](./sequence-diagram.svg)
