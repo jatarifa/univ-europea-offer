@@ -1,0 +1,89 @@
+@startuml Recomendador de Trayectorias - Arquitectura Multi-Agente Simplificada
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/react.puml
+!include DEVICONS/python.puml
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/brain.puml
+
+LAYOUT_TOP_DOWN()
+
+title Recomendador de Trayectorias - Arquitectura Multi-Agente IA\nPropuesta Inorganic para Universidad Europea
+
+Person(estudiante, "Usuario", "Estudiante, futuro alumno o alumni que busca orientación académico-profesional", $sprite="users")
+
+' CAPA DE INTERFAZ
+Container(canales, "Canales de Interacción", "Web, Mobile, WhatsApp", "Interfaces multicanal para consultar recomendaciones de trayectorias", $sprite="react")
+
+' CAPA DE ORQUESTACIÓN
+Container(orquestador, "Orquestador de Agentes IA", "LangGraph, Temporal.io", "Coordina agentes especializados según contexto y objetivo del usuario", $sprite="brain")
+
+' CAPA DE AGENTES ESPECIALIZADOS
+Boundary(agentes, "Agentes IA Especializados") {
+    Container(career_advisor, "Career Advisor Agent", "LLM + RAG", "Diseña trayectorias académicas alineadas con objetivos profesionales", $sprite="brain")
+
+    Container(market_intelligence, "Market Intelligence Agent", "LLM + Analytics", "Analiza tendencias laborales y demanda de competencias", $sprite="brain")
+
+    Container(course_expert, "Course Expert Agent", "LLM + RAG", "Conocimiento profundo del catálogo de formaciones", $sprite="brain")
+
+    Container(student_coach, "Student Coach Agent", "LLM + Memory", "Acompañamiento personalizado en el proceso de decisión", $sprite="brain")
+
+    Container(skills_assessment, "Skills Assessment Agent", "LLM + ML", "Evalúa competencias y detecta gaps de conocimiento", $sprite="brain")
+}
+
+' CAPA DE HERRAMIENTAS Y CONOCIMIENTO
+ContainerDb(knowledge_graph, "Knowledge Graph", "Vector DB (Qdrant) + Graph DB (Neo4j)", "Grafo de conocimiento que relaciona competencias, cursos, roles profesionales y trayectorias. Incluye embeddings para búsqueda semántica y grafo de relaciones")
+
+Container(tools, "Herramientas de Agentes", "Web Search, Analytics", "Funcionalidades especializadas para agentes")
+
+ContainerDb(memory, "Memoria Compartida", "Redis, PostgreSQL", "Contexto conversacional e historial de interacciones")
+
+' CAPA DE DATOS
+ContainerDb(university_systems, "Sistemas Universidad", "CRM, LMS, Matrícula", "Datos de estudiantes y cursos")
+
+ContainerDb(job_market, "Mercado Laboral", "LinkedIn, InfoJobs", "Ofertas de empleo y tendencias")
+
+System_Ext(gemini, "Google Gemini", "LLM externo para potenciar capacidades de los agentes con razonamiento avanzado")
+System_Ext(linkedin_api, "LinkedIn API", "API de LinkedIn para extracción de ofertas de empleo y análisis de tendencias")
+System_Ext(infojobs_api, "InfoJobs API", "API de InfoJobs para ofertas de empleo del mercado español")
+System_Ext(web_sources, "Otras Fuentes Web", "Indeed, Glassdoor y otras fuentes de información laboral")
+
+' RELACIONES - Usuario
+Rel_R(estudiante, canales, "Consulta recomendaciones", "HTTPS/WhatsApp")
+
+' RELACIONES - Canales -> Orquestador
+Rel_D(canales, orquestador, "Envía consulta del usuario", "API")
+
+' RELACIONES - Orquestador -> Agentes
+Rel(orquestador, career_advisor, "Delega diseño de trayectoria", "Agent Protocol")
+Rel(orquestador, market_intelligence, "Solicita análisis de mercado", "Agent Protocol")
+Rel(orquestador, course_expert, "Consulta catálogo de formaciones", "Agent Protocol")
+Rel(orquestador, student_coach, "Requiere acompañamiento", "Agent Protocol")
+Rel(orquestador, skills_assessment, "Solicita evaluación de competencias", "Agent Protocol")
+Rel(orquestador, gemini, "Coordinador de razonamiento avanzado", "API")
+
+' RELACIONES - Agentes -> Recursos
+Rel(career_advisor, knowledge_graph, "Consulta trayectorias similares en grafo", "Cypher + Vector Search")
+Rel_U(career_advisor, tools, "Usa Analytics", "API")
+Rel(market_intelligence, knowledge_graph, "Analiza ofertas y tendencias", "Vector Search")
+Rel_U(market_intelligence, tools, "Usa Web Search", "API")
+Rel(course_expert, knowledge_graph, "Busca cursos y relaciones en grafo", "Cypher + Vector Search")
+Rel(student_coach, memory, "Lee/escribe contexto", "API")
+Rel(skills_assessment, knowledge_graph, "Compara competencias en grafo", "Cypher Query")
+
+' RELACIÓN - Agentes -> Gemini (simplificado)
+Rel_R(agentes, gemini, "Razonamiento avanzado, análisis predictivo y generación de respuestas", "API")
+
+' RELACIONES - Sistemas Externos -> Fuentes de Datos
+Rel(linkedin_api, job_market, "Provee ofertas de empleo globales", "REST API")
+Rel(infojobs_api, job_market, "Provee ofertas del mercado español", "REST API")
+Rel(web_sources, job_market, "Scraping de ofertas adicionales", "Web Scraping")
+
+' RELACIONES - Recursos -> Fuentes de Datos
+Rel_L(knowledge_graph, university_systems, "Sincroniza datos y construye grafo de relaciones", "API")
+Rel_U(knowledge_graph, job_market, "Ingesta ofertas y genera embeddings", "ETL")
+Rel_R(tools, job_market, "Búsquedas en tiempo real", "API")
+
+@enduml
