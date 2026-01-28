@@ -1,4 +1,5 @@
-@startuml
+@startuml sequence-diagram
+
 !theme blueprint
 skinparam responseMessageBelowArrow true
 skinparam sequenceMessageAlign center
