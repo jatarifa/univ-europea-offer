@@ -1,9 +1,8 @@
 # Arquitectura multi-agente IA - Recomendador de trayectorias
-**Universidad Europea | Propuesta Inorganic**
 
 ---
 
-## Resumen ejecutivo
+## Resumen
 
 Sistema inteligente basado en **agentes IA especializados** que colaboran para ofrecer recomendaciones personalizadas de trayectorias académico-profesionales a estudiantes, combinando:
 
