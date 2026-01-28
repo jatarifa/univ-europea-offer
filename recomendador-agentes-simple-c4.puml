@@ -34,7 +34,7 @@ Boundary(agentes, "Agentes IA Especializados") {
 }
 
 ' CAPA DE HERRAMIENTAS Y CONOCIMIENTO
-ContainerDb(knowledge_graph, "Knowledge Graph", "Vector DB (Qdrant) + Graph DB (Neo4j)", "Grafo de conocimiento que relaciona competencias, cursos, roles profesionales y trayectorias. Incluye embeddings para búsqueda semántica y grafo de relaciones")
+ContainerDb(knowledge_graph, "Knowledge Graph (RAG)", "Vector DB (Qdrant) + Graph DB (Neo4j)", "Grafo de conocimiento que relaciona competencias, cursos, roles profesionales y trayectorias. Incluye embeddings para búsqueda semántica y grafo de relaciones")
 
 Container(tools, "Herramientas de Agentes", "Web Search, Analytics", "Funcionalidades especializadas para agentes")
 
