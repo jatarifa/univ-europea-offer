@@ -1,23 +1,23 @@
-# Arquitectura Multi-Agente IA - Recomendador de Trayectorias
+# Arquitectura multi-agente IA - Recomendador de trayectorias
 **Universidad Europea | Propuesta Inorganic**
 
 ---
 
-## Resumen Ejecutivo
+## Resumen ejecutivo
 
 Sistema inteligente basado en **agentes IA especializados** que colaboran para ofrecer recomendaciones personalizadas de trayectorias académico-profesionales a estudiantes, combinando:
 
-- 🎓 Análisis del perfil del estudiante y sus objetivos
-- 📊 Inteligencia de mercado laboral en tiempo real (LinkedIn, InfoJobs)
-- 📚 Conocimiento profundo del catálogo formativo de la Universidad
-- 🤝 Acompañamiento personalizado durante el proceso de decisión
-- 🧠 Razonamiento avanzado mediante Google Gemini
+- Análisis del perfil del estudiante y sus objetivos
+- Inteligencia de mercado laboral en tiempo real (LinkedIn, InfoJobs)
+- Conocimiento profundo del catálogo formativo de la Universidad
+- Acompañamiento personalizado durante el proceso de decisión
+- Razonamiento avanzado mediante Google Gemini
 
 ---
 
-## Arquitectura del Sistema
+## Arquitectura del sistema
 
-### Capas Principales
+### Capas principales
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -46,7 +46,7 @@ Sistema inteligente basado en **agentes IA especializados** que colaboran para o
 
 ---
 
-## 1. Canales de Interacción
+## 1. Canales de interacción
 
 Interfaces multicanal para que usuarios consulten recomendaciones desde cualquier dispositivo.
 
@@ -59,9 +59,9 @@ Interfaces multicanal para que usuarios consulten recomendaciones desde cualquie
 
 ---
 
-## 2. Orquestador de Agentes IA
+## 2. Orquestador de agentes IA
 
-Cerebro del sistema que coordina agentes especializados según el contexto del usuario.
+El cerebro del sistema que coordina agentes especializados según el contexto del usuario.
 
 **Responsabilidades**:
 - Analizar consulta del usuario
@@ -70,7 +70,7 @@ Cerebro del sistema que coordina agentes especializados según el contexto del u
 - Agregar resultados de múltiples agentes
 - Retornar respuesta unificada
 
-**Patrones de Orquestación**:
+**Patrones de orquestación**:
 
 Sequential: `Usuario → Skills Assessment → Market Intelligence → Career Advisor → Respuesta`
 
@@ -80,9 +80,9 @@ Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación →
 
 ---
 
-## 3. Agentes IA Especializados
+## 3. Agentes IA especializados
 
-### 3.1 Career Advisor Agent (Asesor de Carrera)
+### 3.1 Career Advisor Agent (asesor de carrera)
 
 **Especialidad**: Diseño de trayectorias académicas personalizadas
 
@@ -98,7 +98,7 @@ Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación →
 
 ---
 
-### 3.2 Market Intelligence Agent (Inteligencia de Mercado)
+### 3.2 Market Intelligence Agent (inteligencia de mercado)
 
 **Especialidad**: Análisis del mercado laboral en tiempo real
 
@@ -116,7 +116,7 @@ Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación →
 
 ---
 
-### 3.3 Course Expert Agent (Experto en Catálogo)
+### 3.3 Course Expert Agent (experto en catálogo)
 
 **Especialidad**: Conocimiento del catálogo formativo de la Universidad
 
@@ -132,7 +132,7 @@ Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación →
 
 ---
 
-### 3.4 Student Coach Agent (Coach del Estudiante)
+### 3.4 Student Coach Agent (coach del estudiante)
 
 **Especialidad**: Acompañamiento personalizado y empático
 
@@ -148,7 +148,7 @@ Parallel: `Usuario → [Market Intelligence + Course Expert] → Agregación →
 
 ---
 
-### 3.5 Skills Assessment Agent (Evaluador de Competencias)
+### 3.5 Skills Assessment Agent (evaluador de competencias)
 
 **Especialidad**: Evaluación técnica de competencias
 
@@ -169,11 +169,11 @@ Perfil actual:        Gap para Data Scientist:
 
 ---
 
-## 4. Google Gemini (LLM Externo)
+## 4. Google Gemini (LLM externo)
 
 Modelo de lenguaje que potencia las capacidades avanzadas de los agentes.
 
-**Uso por Agente**:
+**Uso por agente**:
 - **Career Advisor**: Razonamiento complejo para diseño de trayectorias
 - **Market Intelligence**: Análisis predictivo de tendencias
 - **Student Coach**: Respuestas empáticas contextualizadas
@@ -182,13 +182,13 @@ Modelo de lenguaje que potencia las capacidades avanzadas de los agentes.
 
 **Ventajas**: Razonamiento avanzado multimodal, contexto largo (2M tokens), latencia baja, multilenguaje
 
-**Estrategia Híbrida**:
+**Estrategia híbrida**:
 - Modelos locales: Tareas simples, privacidad crítica, alto volumen
 - Gemini: Razonamiento complejo, decisiones críticas
 
 ---
 
-## 5. Knowledge Graph (Grafo de Conocimiento)
+## 5. Knowledge Graph (grafo de conocimiento)
 
 Sistema híbrido: búsqueda semántica vectorial + relaciones estructuradas en grafo.
 
@@ -219,7 +219,7 @@ Estructura:
 
 ---
 
-## 6. Event Bus (Arquitectura Event-Driven)
+## 6. Event Bus (arquitectura event-driven)
 
 Sistema de mensajería asíncrono que dispara regeneración automática del Knowledge Graph.
 
@@ -245,14 +245,14 @@ LinkedIn API → Nuevas ofertas → Job Market DB
 
 ---
 
-## 7. Herramientas de Agentes
+## 7. Herramientas de agentes
 
 **Web Search Tool**: Información actualizada (Tavily API)
 **Analytics Tool**: ROI, tendencias, métricas
 
 ---
 
-## 8. Memoria Compartida
+## 8. Memoria compartida
 
 **Redis** (sesiones): Contexto actual, variables temporales (TTL: 30-60 min)
 **PostgreSQL** (historial): Recomendaciones, interacciones, feedback
@@ -261,7 +261,7 @@ LinkedIn API → Nuevas ofertas → Job Market DB
 
 ---
 
-## Ejemplo Completo: Usuario quiere ser Data Scientist
+## Ejemplo completo: usuario quiere ser Data Scientist
 
 ```
 1. Usuario (WhatsApp): "Quiero ser Data Scientist, tengo Grado en Economía"
@@ -283,108 +283,19 @@ LinkedIn API → Nuevas ofertas → Job Market DB
    ↓
 7. Respuesta:
    "Te recomiendo MÁSTER EN DATA SCIENCE
-   
+
    Por qué:
    - Aprovecha tu base cuantitativa
    - Desarrolla Python, ML, Big Data
    - Modalidad Online
-   
+
    Perspectivas:
    - Demanda: MUY ALTA (8,500 ofertas/mes, +40% YoY)
    - Salario: 50-60K EUR inicial, 70-90K EUR con experiencia
    - ROI: 300% en 4 años
-   
+
    Inversión: 15,000 EUR (becas hasta 30%)
    Duración: 12 meses
-   
+
    ¿Te ayudo con la beca?"
 ```
-
----
-
-## Stack Tecnológico
-
-**AI/ML**: LangGraph, Temporal.io, Google Gemini, Llama 3, LangChain
-
-**Backend**: Python 3.11+, FastAPI, Celery, Airflow
-
-**Bases de Datos**:
-- PostgreSQL + pgvector (relacional)
-- MongoDB (ofertas empleo)
-- Qdrant (vectorial)
-- Neo4j (grafo)
-- Redis (caché)
-- Kafka (eventos)
-
-**Frontend**: React + TypeScript, React Native
-
-**Infraestructura**: AWS/Azure/GCP, Docker, Kubernetes, LangSmith, Prometheus, Grafana
-
----
-
-## Estimaciones
-
-### Tiempo
-
-**Fase 1 - MVP (4-5 meses)**:
-- 3 agentes core (Coach, Course Expert, Career Advisor)
-- Orquestador básico, Web app, Knowledge Graph básico
-
-**Fase 2 - Avanzado (3 meses)**:
-- Market Intelligence, Skills Assessment
-- Event Bus, múltiples fuentes datos
-
-**Fase 3 - Optimización (3 meses)**:
-- Mobile app, optimización modelos, analytics, A/B testing
-
-**Total: 10-11 meses**
-
-### Costes Mensuales (Cloud)
-
-- Compute: $3,800/mes
-- Databases: $1,050/mes
-- Vector DB: $250/mes
-- Kafka: $300/mes
-- Storage: $300/mes
-- Observabilidad: $350/mes
-- Gemini API: $500-1,000/mes
-
-**Total: $6,500-7,000/mes**
-
----
-
-## Ventajas vs. Arquitectura Tradicional
-
-| Aspecto | Tradicional | Multi-Agente IA |
-|---------|-------------|-----------------|
-| Modularidad | Baja | ⭐⭐⭐⭐⭐ Alta |
-| Especialización | Genérica | ⭐⭐⭐⭐⭐ Expertos |
-| Autonomía | Baja | ⭐⭐⭐⭐⭐ Alta |
-| Observabilidad | Limitada | ⭐⭐⭐⭐⭐ Trazable |
-| Adaptabilidad | Código | ⭐⭐⭐⭐⭐ Automática |
-| Escalabilidad | Monolítica | ⭐⭐⭐⭐⭐ Por agente |
-
-**Diferenciadores**:
-- Expertise especializado por agente
-- Razonamiento explicable
-- Mejora continua independiente
-- Fácil extensibilidad
-- Colaboración inteligente
-- Actualización en tiempo real
-
----
-
-## Próximos Pasos
-
-1. **Workshop de Validación (2h)**: Presentación + Demo PoC + Q&A
-2. **PoC Career Advisor Agent (4 semanas)**: 1 agente funcional con datos reales
-3. **Roadmap Detallado (1 semana)**: Planificación sprints, hitos, riesgos
-4. **Kick-off**: Setup infraestructura, onboarding, Sprint 0
-
----
-
-**Contacto**
-
-Inorganic: alexia@inorganic.com | mikel@inorganic.com
-
-Cliente: Universidad Europea | Versión: 1.0 | Fecha: Enero 2026
