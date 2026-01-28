@@ -27,7 +27,7 @@ El sistema se estructura en cinco capas que trabajan de forma coordinada. Desde 
                         ▼
 ┌─────────────────────────────────────────────────────┐
 │  Orquestador de Agentes IA                          │
-│  (LangGraph + Temporal.io)                          │
+│  (LangGraph / Temporal.io)                          │
 └─────────────────────────────────────────────────────┘
                         ▼
 ┌─────────────────────────────────────────────────────┐
