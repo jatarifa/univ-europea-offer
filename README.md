@@ -35,7 +35,7 @@ El sistema se estructura en cinco capas que trabajan de forma coordinada. Desde 
 └─────────────────────────────────────────────────────┘
                         ▼
 ┌─────────────────────────────────────────────────────┐
-│  Knowledge Graph (Vector DB + Graph DB)             │
+│  Knowledge Graph RAG (Vector DB + Graph DB)         │
 │  Herramientas | Memoria | Event Bus                 │
 └─────────────────────────────────────────────────────┘
                         ▼
