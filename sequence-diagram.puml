@@ -5,12 +5,12 @@ skinparam responseMessageBelowArrow true
 skinparam sequenceMessageAlign center
 
 actor Usuario as user
-participant "Orquestador\nTemporal.io" as orchestrator
-participant "Student Coach\nAgent" as coach
-participant "Skills Assessment\nAgent" as skills
-participant "Market Intelligence\nAgent" as market
-participant "Course Expert\nAgent" as course
-participant "Career Advisor\nAgent" as advisor
+participant "Orquestador\nTemporal.io" as orchestrator <<workflow>>
+participant "Student Coach\nAgent" as coach <<activity>>
+participant "Skills Assessment\nAgent" as skills <<activity>>
+participant "Market Intelligence\nAgent" as market <<activity>>
+participant "Course Expert\nAgent" as course <<activity>>
+participant "Career Advisor\nAgent" as advisor <<activity>>
 database "Knowledge\nGraph" as kg
 database "Memoria\nCompartida" as memory
 participant "Google\nGemini" as gemini
@@ -20,9 +20,9 @@ title Flujo de recomendación de trayectoria académica
 user -> orchestrator: "Quiero ser Data Scientist,\ntengo Grado en Economía"
 activate orchestrator
 
-orchestrator -> memory: Guardar contexto sesión
 orchestrator -> coach: Analizar consulta inicial
 activate coach
+coach -> memory: Guardar contexto sesión
 coach -> coach: Evaluar información disponible
 coach --> orchestrator: Necesita más contexto
 deactivate coach
@@ -30,36 +30,39 @@ deactivate coach
 orchestrator -> user: "¿Experiencia con datos?\n¿Restricciones tiempo/presupuesto?"
 user -> orchestrator: "1 año analista, uso SQL y Excel.\nPresupuesto medio, 2 años"
 
-orchestrator -> memory: Actualizar contexto
-
 orchestrator -> skills: Evaluar competencias actuales
 activate skills
+skills -> memory: Recuperar contexto
+memory --> skills: Perfil inicial
 skills -> kg: Consultar skills requeridos\npara Data Scientist
 kg --> skills: Lista competencias
 skills -> skills: Mapear experiencia a skills
+skills -> memory: Guardar evaluación
 skills --> orchestrator: SQL ✓ Excel ✓\nPython básico, ML ✗ (gap 60%)
 deactivate skills
-
-orchestrator -> memory: Guardar evaluación
 
 par Ejecución paralela
     orchestrator -> market: Analizar mercado laboral\npara Data Scientist
     activate market
+    market -> memory: Recuperar contexto
+    memory --> market: Perfil + Skills
     market -> market: Consultar LinkedIn/InfoJobs API
     market -> kg: Consultar tendencias históricas
     kg --> market: Datos tendencias
+    market -> memory: Guardar análisis mercado
     market --> orchestrator: 8,500 ofertas/mes\n+40% YoY, 50-70K EUR
     deactivate market
 else
     orchestrator -> course: Buscar formaciones compatibles
     activate course
+    course -> memory: Recuperar contexto
+    memory --> course: Perfil + Skills
     course -> kg: Query: Cursos para gap ML\ncon restricciones tiempo/presupuesto
     kg --> course: Máster Data Science
+    course -> memory: Guardar cursos encontrados
     course --> orchestrator: Máster Data Science\n12 meses, Online
     deactivate course
 end
-
-orchestrator -> memory: Guardar resultados market + course
 
 orchestrator -> advisor: Diseñar trayectorias con\ncontexto completo
 activate advisor
@@ -72,10 +75,9 @@ gemini -> gemini: Evaluar opciones formativas
 gemini -> gemini: Calcular ROI y alineamiento
 gemini --> advisor: 3 trayectorias con razonamiento
 deactivate gemini
+advisor -> memory: Guardar recomendación
 advisor --> orchestrator: Trayectoria recomendada:\nMáster Data Science\ncon justificación completa
 deactivate advisor
-
-orchestrator -> memory: Guardar recomendación
 orchestrator -> user: "Te recomiendo MÁSTER EN DATA SCIENCE\n\nPor qué: ...\nPerspectivas: ...\nROI: 300% en 4 años"
 deactivate orchestrator
 
