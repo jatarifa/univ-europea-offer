@@ -299,6 +299,98 @@ LIMIT 3
 
 ---
 
+### Event Bus (Bus de Eventos)
+
+**Componente**: Apache Kafka / RabbitMQ
+
+**Propósito**: Sistema de mensajería asíncrono que dispara la regeneración automática del Knowledge Graph ante cambios en los datos.
+
+**Arquitectura Event-Driven**:
+```
+Fuente de Datos → Cambio detectado → Event Bus → Knowledge Graph
+                                                 → Regeneración automática
+```
+
+**Eventos Publicados**:
+
+1. **Desde Sistemas Universidad**:
+   - `course.created`: Nuevo curso añadido al catálogo
+   - `course.updated`: Curso existente modificado (precio, contenido, modalidad)
+   - `course.deleted`: Curso eliminado del catálogo
+   - `student.enrolled`: Nuevo estudiante matriculado
+   - `student.profile.updated`: Perfil de estudiante actualizado
+
+2. **Desde Mercado Laboral**:
+   - `job_offers.new_batch`: Nuevas ofertas de empleo ingresadas
+   - `job_offers.trend_detected`: Nueva tendencia identificada
+   - `skills.emerging`: Competencia emergente detectada
+   - `salary.updated`: Datos salariales actualizados
+
+**Consumidores (Subscribers)**:
+
+**Knowledge Graph Updater**:
+```python
+@kafka_consumer(topics=['course.*', 'job_offers.*', 'skills.*'])
+async def update_knowledge_graph(event):
+    if event.type.startswith('course'):
+        # Regenerar embeddings del curso
+        course_embedding = generate_embedding(event.data)
+
+        # Actualizar Vector DB
+        qdrant_client.upsert(
+            collection='courses',
+            points=[{
+                'id': event.data.id,
+                'vector': course_embedding,
+                'payload': event.data
+            }]
+        )
+
+        # Actualizar Graph DB
+        neo4j_session.run("""
+            MERGE (c:Course {id: $id})
+            SET c.name = $name, c.updated_at = $timestamp
+        """, event.data)
+
+    elif event.type.startswith('job_offers'):
+        # Actualizar embeddings de ofertas
+        # Recalcular tendencias de mercado
+        # Actualizar nodos y relaciones en grafo
+```
+
+**Ventajas del Event Bus**:
+
+✅ **Desacoplamiento**: Fuentes de datos no necesitan conocer el Knowledge Graph
+✅ **Escalabilidad**: Procesamiento asíncrono sin bloquear operaciones
+✅ **Resiliencia**: Reintentos automáticos si falla la actualización
+✅ **Auditabilidad**: Log completo de todos los cambios
+✅ **Tiempo real**: Knowledge Graph siempre actualizado
+✅ **Extensibilidad**: Fácil añadir nuevos consumidores
+
+**Ejemplo de Flujo**:
+```
+1. LinkedIn API scraping detecta 50 nuevas ofertas de "Cloud Architect"
+   ↓
+2. Job Market DB almacena las ofertas
+   ↓
+3. Publica evento: job_offers.new_batch
+   ↓
+4. Event Bus distribuye a subscribers:
+   - Knowledge Graph Updater: regenera embeddings
+   - Market Intelligence Agent: actualiza estadísticas
+   - Cache Invalidator: limpia caché relacionado
+   ↓
+5. Knowledge Graph actualizado en <1 minuto
+   ↓
+6. Próxima consulta de usuario ya tiene datos frescos
+```
+
+**Tecnología recomendada**:
+- **Apache Kafka**: Si se requiere alto throughput y retención de eventos
+- **RabbitMQ**: Si se prioriza simplicidad y bajo overhead operacional
+
+---
+
 ## Capa 5: Fuentes de Datos
 
 ### Sistemas de la Universidad

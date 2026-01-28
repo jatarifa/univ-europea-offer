@@ -40,6 +40,8 @@ Container(tools, "Herramientas de Agentes", "Web Search, Analytics", "Funcionali
 
 ContainerDb(memory, "Memoria Compartida", "Redis, PostgreSQL", "Contexto conversacional e historial de interacciones")
 
+ContainerQueue(event_bus, "Event Bus", "Apache Kafka / RabbitMQ", "Bus de eventos que dispara regeneración del Knowledge Graph ante cambios en datos")
+
 ' CAPA DE DATOS
 ContainerDb(university_systems, "Sistemas Universidad", "CRM, LMS, Matrícula", "Datos de estudiantes y cursos")
 
@@ -62,7 +64,7 @@ Rel(orquestador, market_intelligence, "Solicita análisis de mercado", "Agent Pr
 Rel(orquestador, course_expert, "Consulta catálogo de formaciones", "Agent Protocol")
 Rel(orquestador, student_coach, "Requiere acompañamiento", "Agent Protocol")
 Rel(orquestador, skills_assessment, "Solicita evaluación de competencias", "Agent Protocol")
-Rel(orquestador, gemini, "Coordinador de razonamiento avanzado", "API")
+Rel_L(orquestador, gemini, "Coordinador de razonamiento avanzado", "API")
 
 ' RELACIONES - Agentes -> Recursos
 Rel(career_advisor, knowledge_graph, "Consulta trayectorias similares en grafo", "Cypher + Vector Search")
@@ -74,16 +76,21 @@ Rel(student_coach, memory, "Lee/escribe contexto", "API")
 Rel(skills_assessment, knowledge_graph, "Compara competencias en grafo", "Cypher Query")
 
 ' RELACIÓN - Agentes -> Gemini (simplificado)
-Rel_R(agentes, gemini, "Razonamiento avanzado, análisis predictivo y generación de respuestas", "API")
+Rel_L(agentes, gemini, "Razonamiento avanzado, análisis predictivo y generación de respuestas", "API")
 
 ' RELACIONES - Sistemas Externos -> Fuentes de Datos
 Rel(linkedin_api, job_market, "Provee ofertas de empleo globales", "REST API")
-Rel(infojobs_api, job_market, "Provee ofertas del mercado español", "REST API")
+Rel_L(infojobs_api, job_market, "Provee ofertas del mercado español", "REST API")
 Rel(web_sources, job_market, "Scraping de ofertas adicionales", "Web Scraping")
 
 ' RELACIONES - Recursos -> Fuentes de Datos
 Rel_L(knowledge_graph, university_systems, "Sincroniza datos y construye grafo de relaciones", "API")
 Rel_U(knowledge_graph, job_market, "Ingesta ofertas y genera embeddings", "ETL")
 Rel_R(tools, job_market, "Búsquedas en tiempo real", "API")
+
+' RELACIONES - Event Bus (Regeneración de Knowledge Graph)
+Rel_R(university_systems, event_bus, "Publica eventos: curso actualizado, nuevo programa", "Event")
+Rel_D(job_market, event_bus, "Publica eventos: nuevas ofertas, tendencias actualizadas", "Event")
+Rel_D(event_bus, knowledge_graph, "Dispara regeneración de embeddings y actualización de grafo", "Trigger")
 
 @enduml
