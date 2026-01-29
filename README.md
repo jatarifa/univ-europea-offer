@@ -14,6 +14,19 @@ Sistema inteligente basado en **agentes IA especializados** que colaboran para o
 
 ---
 
+## Fundamentos arquitectónicos
+
+Esta arquitectura se basa y sigue las mejores prácticas definidas por Google para sistemas de IA agéntica, tal como se describen en la documentación oficial de [componentes de arquitectura de IA agéntica](https://docs.cloud.google.com/architecture/choose-agentic-ai-architecture-components?hl=es#built-in-tools).
+
+Los principios clave aplicados incluyen:
+- **Orquestación inteligente de agentes** para coordinar múltiples agentes especializados
+- **Knowledge Graph híbrido** combinando búsqueda vectorial y relacional
+- **Arquitectura event-driven** para actualizaciones en tiempo real
+- **Herramientas especializadas** integradas con los agentes
+- **Memoria compartida** para contexto persistente entre agentes
+
+---
+
 ## Arquitectura del sistema
 
 ### Capas principales
